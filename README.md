@@ -98,7 +98,100 @@ We need to start the jupyter server on the nano. Be sure and switch to your virt
 
 Copy and paste the link into the address bar of a browser on your development machine. Change the port number from 8888 to 8000 and hit enter. You should see the jupyter lab running with your project files in the left side bar. Create a new python 3 notebook by pressing the python 3 button in the main page.
 
-## Load the Pre-Trained Model
+## Add Classes JSON File to Project Directory
+
+Before we load the model, we are going to need to add the class labels json file. Download it to your development machine by right clicking the following link [classes json file](https://raw.githubusercontent.com/anishathalye/imagenet-simple-labels/master/imagenet-simple-labels.json) and select save link as. You could transfer it using scp, but you can also just add it to the directory using the jupyter lab file browser which is a little easier. Just press the upload files button in the file browser of jupyter lab to upload the downloaded json file. 
+
+## Load the Model 
+
+In a new notebook cell, insert and run the following code. Press shift+enter to run the cell:
+
+```python
+import torch, json
+import numpy as np
+from torchvision import datasets, models, transforms
+from PIL import Image
+# Import matplotlib and configure it for pretty inline plots
+import matplotlib.pyplot as plt
+%matplotlib inline
+%config InlineBackend.figure_format = 'retina'
+```
+Load the model in a new cell
+
+```python
+model = models.mobilenet_v2(pretrained=True)
+# Send the model to the GPU 
+model.cuda()
+# Set layers such as dropout and batchnorm in evaluation mode
+model.eval();
+```
+We need to load the labels from the json file as well. Run the following in a new cell:
+
+```python
+with open("imagenet-simple-labels.json") as f:
+    labels = json.load(f)
+```
+
+## Load and Transform the Image
+We need to add the necessary transformations for the image file so the network gets an input it expects:
+
+```python
+data_transform = transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor()])
+```
+Go ahead and load the image and plot it
+
+```python
+test_image = 'elephant.jpeg'
+image = Image.open(test_image)
+plt.imshow(image), plt.xticks([]), plt.yticks([])
+```
+
+Transform the image using the transformations we created earlier
+
+```
+image = data_transform(image).unsqueeze(0).cuda()
+```
+## Make an Inference
+
+We can see what the network thinks the image is using the code below:
+
+```python
+out = model(image)
+# Find the predicted class
+print("Predicted class is: {}".format(labels[out.argmax()]))
+```
+
+## Benchmark
+
+We can run multiple iterations:
+
+```python
+import time
+fps = np.zeros(200)
+with torch.no_grad(): # speed it up by not computing gradients since we don't need them for inference
+    for i in range(200):
+        t0 = time.time()
+        out = model(image)
+        fps[i] = 1 / (time.time() - t0)
+        
+```
+
+and plot the fps results
+
+```python
+fig, ax = plt.subplots();  # the semicolon silences the irrelevant output
+ax.plot(fps)
+ax.set_xlabel("Iteration");
+ax.set_ylabel("FPS");
+```
+        
+        
+     
+
+
+
+
+
 
 
 
