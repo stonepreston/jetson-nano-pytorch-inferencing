@@ -70,7 +70,7 @@ We also install matplotlib, pillow 5.4.1 and numpy. Pillow 5.4.1 is needed becau
     >>> import torchvision
     >>> print(torchvision.__version__)
     
-You can exit the interpreter using exit()
+Take note of the version numbers for torch and torch vision. We will need them later. You can exit the interpreter using exit()
 
 ## Install Jupyter Lab
 
@@ -79,3 +79,10 @@ Jupyter lab is a browser based IDE-like experience for interactive jupyter noteb
     $ pip3 install jupyterlab
 
 # Build the Model
+
+## Google Colaboratory
+
+Create a new Python 3 google colab notebook (File -> New Python 3 Notebook). You may also want to enable GPU acceleration (Runtime -> Change runtime type) and select GPU under the Hardware accelerator drop down menu. (It won’t affect anything since we are using a pre trained model, but it’s handy to know where that option is)
+
+We need the PyTorch version on our colab notebook to match the version we have on our nano. In a new cell add the following code. Insert the version number (without quotes) that was output from your nano in where PUT_VERSION_HERE is:
+
