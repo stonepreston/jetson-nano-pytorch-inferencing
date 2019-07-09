@@ -21,7 +21,7 @@ You can check whether it installed successfully using the command below:
 
     $ python3 -m pip --version
     
- ### Venv setup
+### Venv setup
  
  Install venv
  
