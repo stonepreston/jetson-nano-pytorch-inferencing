@@ -84,7 +84,7 @@ Jupyter lab is a browser based IDE-like experience for interactive jupyter noteb
 
 Create a new Python 3 google colab notebook (File -> New Python 3 Notebook). You may also want to enable GPU acceleration (Runtime -> Change runtime type) and select GPU under the Hardware accelerator drop down menu. (It won’t affect anything since we are using a pre trained model, but it’s handy to know where that option is)
 
-We need the PyTorch version on our colab notebook to match the version we have on our nano. In a new cell add the following code. Insert the version number (without quotes) that was output from your nano in where PUT_VERSION_HERE is:
+We need the PyTorch and torchvision versions on our colab notebook to match the versions we have on our nano. In a new cell add the following code. Insert the version numbers (without quotes) that were output from your nano in where PUT_VERSION_HERE is:
 
-   !pip install -q torch==PUT_VERSION_HERE torchvision
+   !pip install torch==PUT_VERSION_HERE torchvision==PUT_VERSION_HERE
 
