@@ -1,37 +1,37 @@
-## Welcome to GitHub Pages
+# Nano Setup
 
-You can use the [editor on GitHub](https://github.com/stonepreston/jetson-nano-pytorch-inferencing/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+On your development machine, open a terminal window and ssh into nano. Enter your password when prompted.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+    $ ssh your_nano_username@your_nano_ip
 
-### Markdown
+You will now be connected to your nano inside the terminal window. Create a project directory for your pytorch project in your home directory.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+    $ cd 
+    $ mkdir your_project_folder
 
-```markdown
-Syntax highlighted code block
+## Python Virtual Environment Setup
 
-# Header 1
-## Header 2
-### Header 3
+We need to setup python on the nano. Using virtual environments is best practice to help with dependancy management. In this section, we will install a python package manager (pip) and setup a virtual environment using venv.
 
-- Bulleted
-- List
+### Install and upgrade pip
 
-1. Numbered
-2. List
+    $ python3 -m pip install --user --upgrade pip
 
-**Bold** and _Italic_ and `Code` text
+You can check whether it installed successfully using the command below:
 
-[Link](url) and ![Image](src)
-```
+    $ python3 -m pip --version
+    
+ ### Venv setup
+ 
+ Install venv
+ 
+    $ sudo apt-get install python3-venv
+    
+Now create a new virtual environment called env inside your project folder. Note that we use the -m flag (module) to use the venv python module.
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/stonepreston/jetson-nano-pytorch-inferencing/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+    $ cd your_project_folder
+    $ python3 -m venv env
+    
+ Activate the virtual environment
+ 
+     $ source env/bin/activate
