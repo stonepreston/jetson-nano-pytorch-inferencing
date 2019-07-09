@@ -42,8 +42,10 @@ Installation steps are found [here](https://devtalk.nvidia.com/default/topic/104
 
 ### Install PyTorch for the Jetson Nano (Python 3.6)
 
+We also install matplotlib, pillow 5.4.1 and numpy. Pillow 5.4.1 is needed because of a bug with pillow 6.0.0
+
     $ wget https://nvidia.box.com/shared/static/j2dn48btaxosqp0zremqqm8pjelriyvs.whl -O torch-1.1.0-cp36-cp36m-linux_aarch64.whl
-    $ pip3 install numpy torch-1.1.0-cp36-cp36m-linux_aarch64.whl
+    $ pip3 install matplotlib pillow==5.4.1 numpy torch-1.1.0-cp36-cp36m-linux_aarch64.whl
     
 ### Install Torchvision
 
