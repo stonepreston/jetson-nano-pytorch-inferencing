@@ -86,5 +86,5 @@ Create a new Python 3 google colab notebook (File -> New Python 3 Notebook). You
 
 We need the PyTorch version on our colab notebook to match the version we have on our nano. In a new cell add the following code. Insert the version number (without quotes) that was output from your nano in where PUT_VERSION_HERE is:
 
-   !pip install -q torch==1.1.0 torchvision
+   !pip install -q torch==PUT_VERSION_HERE torchvision
 
