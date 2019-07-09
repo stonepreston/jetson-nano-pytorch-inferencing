@@ -78,13 +78,28 @@ Jupyter lab is a browser based IDE-like experience for interactive jupyter noteb
 
     $ pip3 install jupyterlab
 
-# Build the Model
+# Inferencing on the Nano
 
-## Google Colaboratory
+## Transfer files and Start Jupyter Lab
 
-Create a new Python 3 google colab notebook (File -> New Python 3 Notebook). You may also want to enable GPU acceleration (Runtime -> Change runtime type) and select GPU under the Hardware accelerator drop down menu. (It won’t affect anything since we are using a pre trained model, but it’s handy to know where that option is)
+We need an image file to test the network with. Download an image of an elephant, any image should do. Transfer it to the project directory using scp:
 
-We need the PyTorch and torchvision versions on our colab notebook to match the versions we have on our nano. In a new cell add the following code. Insert the version numbers (without quotes) that were output from your nano in where PUT_VERSION_HERE is:
+    $ scp ~/Downloads/elephant.jpeg your_jeston_username@jetson_ip:~/your_project_folder
 
-    !pip install torch==PUT_VERSION_HERE torchvision==PUT_VERSION_HERE
+SSH back in the nano, but this time forward port numbers for the jupyter server. This will enable us to access jupyter lab thats running on the nano from the development machine. 
+
+    $ ssh -L 8000:localhost:8888 your_jetson_username@your_jetson_ip
+    
+We need to start the jupyter server on the nano. Be sure and switch to your virtual env. Since we wont be using a browser on the nano, we can pass in the –no-browser-flag:
+ 
+    $ cd ~/your_project_folder
+    $ source env/bin/activate
+    $ jupyter lab --no-browser
+
+Copy and paste the link into the address bar of a browser on your development machine. Change the port number from 8888 to 8000 and hit enter. You should see the jupyter lab running with your project files in the left side bar. Create a new python 3 notebook by pressing the python 3 button in the main page.
+
+## Load the Pre-Trained Model
+
+
+
 
