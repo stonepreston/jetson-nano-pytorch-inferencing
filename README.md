@@ -52,7 +52,7 @@ We also install matplotlib, pillow 5.4.1 and numpy. Pillow 5.4.1 is needed becau
     $ sudo apt-get install libjpeg-dev zlib1g-dev
     $ git clone -b v0.3.0 https://github.com/pytorch/vision torchvision
     $ cd torchvision
-    $ sudo python setup.py install
+    $ python setup.py install
     $ cd ../  # attempting to load torchvision from build dir will result in import error for _C
     
 ### Verify the PyTorch and Torchvision installations
