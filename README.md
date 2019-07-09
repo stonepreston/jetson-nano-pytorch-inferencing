@@ -104,6 +104,8 @@ Before we load the model, we are going to need to add the class labels json file
 
 ## Load the Model 
 
+The following steps are taken  from [here](https://medium.com/@heldenkombinat/image-recognition-with-pytorch-on-the-jetson-nano-fd858a5686aa) and outlined below. 
+
 In a new notebook cell, insert and run the following code. Press shift+enter to run the cell:
 
 ```python
