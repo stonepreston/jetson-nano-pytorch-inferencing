@@ -67,4 +67,13 @@ Installation steps are found [here](https://devtalk.nvidia.com/default/topic/104
     >>> print('Tensor c = ' + str(c))
     >>> import torchvision
     >>> print(torchvision.__version__)
+    
+You can exit the interpreter using exit()
 
+## Install Jupyter Lab
+
+Jupyter lab is a browser based IDE-like experience for interactive jupyter notebooks. It will be used to run code on the nano in the browser of the development machine
+
+    $ pip3 install jupyterlab
+
+# Build the Model
