@@ -77,10 +77,40 @@ Take note of the version numbers for torch and torch vision. We will need them l
 Jupyter lab is a browser based IDE-like experience for interactive jupyter notebooks. It will be used to run code on the nano in the browser of the development machine
 
     $ pip3 install jupyterlab
+    
+## TensorRT setup
+
+To speed up inferencing, we can create convert the pytorch model for use with TensorRT. To do that we will use torch2trt. Install torch2trt using the commands below.
+
+    git clone https://github.com/NVIDIA-AI-IOT/torch2trt
+    cd torch2trt
+    python setup.py install
+    
+We also need to add TensorRT to our virtual env. Its already installed at the system level, so we can create a symlink from the system path to our virtual environment. To find the TensorRT path, use the python3 interpreter (deactivate your virtual environment first
+    
+    $ deactivate
+    $ python3
+    >>> import tensorrt
+    >>> tensorrt.__path__
+
+Copy down the path that is output and exit the interpreter using ```exit()```. Now lets create a symlink in our virtual environment. Past the path that was ouput for tensorrt in where insert_path_here is (no brackets or quotes)
+
+    $ source env/bin/activate
+    $ ln -s insert_path_here $VIRTUAL_ENV/lib/insert_your_python_here/site-packages/
+    
+On my machine, the commands look like this:
+
+    $ source env/bin/activate
+    $ ln -s /usr/lib/python3.6/dist-packages/tensorrt $VIRTUAL_ENV/lib/python3.6/site-packages/
+    
+Im using python 3.6, but if you are using a different version the paths may be slightly different. 
+
 
 # Inferencing on the Nano
 
 ## Transfer files and Start Jupyter Lab
+
+Exit your current SSH session.
 
 We need an image file to test the network with. Download an image of an elephant, any image should do. Transfer it to the project directory using scp:
 
@@ -111,7 +141,9 @@ In a new notebook cell, insert and run the following code. Press shift+enter to 
 ```python
 import torch, json
 import numpy as np
+import tensorrt as trt
 from torchvision import datasets, models, transforms
+from torch2trt import torch2trt
 from PIL import Image
 # Import matplotlib and configure it for pretty inline plots
 import matplotlib.pyplot as plt
@@ -127,7 +159,7 @@ model.cuda()
 # Set layers such as dropout and batchnorm in evaluation mode
 model.eval();
 ```
-We need to load the labels from the json file as well. Run the following in a new cell:
+Load the labels from the json file in a new cell. 
 
 ```python
 with open("imagenet-simple-labels.json") as f:
@@ -153,19 +185,31 @@ Transform the image using the transformations we created earlier
 ```
 image = data_transform(image).unsqueeze(0).cuda()
 ```
+
+# Convert mode for use with TensorRT
+
+```python
+# create example data 
+x = torch.ones((1, 3, 224, 224)).cuda()
+
+# convert to TensorRT feeding sample data as input
+model_trt = torch2trt(model, [x])
+```
 ## Make an Inference
 
-We can see what the network thinks the image is using the code below:
+Make an inference using the standard pytorch model and the TensorRT model
 
 ```python
 out = model(image)
+out_trt = model_trt(image)
 # Find the predicted class
-print("Predicted class is: {}".format(labels[out.argmax()]))
+print("Predicted model class is: {}".format(labels[out.argmax()]))
+print("Predicted model_trt class is: {}".format(labels[out_trt.argmax()]))
 ```
 
-## Benchmark
+## Benchmarks
 
-We can run multiple iterations:
+We can run multiple iterations on each model:
 
 ```python
 import time
@@ -175,16 +219,29 @@ with torch.no_grad(): # speed it up by not computing gradients since we don't ne
         t0 = time.time()
         out = model(image)
         fps[i] = 1 / (time.time() - t0)
+
+fps_trt = np.zeros(200)
+with torch.no_grad(): # speed it up by not computing gradients since we don't need them for inference
+    for i in range(200):
+        t0 = time.time()
+        out = model_trt(image)
+        fps_trt[i] = 1 / (time.time() - t0)
         
 ```
 
 and plot the fps results
 
 ```python
-fig, ax = plt.subplots();  # the semicolon silences the irrelevant output
-ax.plot(fps)
-ax.set_xlabel("Iteration");
-ax.set_ylabel("FPS");
+fig, (ax1, ax2) = plt.subplots(1, 2)
+
+ax1.plot(fps)
+ax1.set_xlabel('Iteration')
+ax1.set_ylabel('FPS')
+ax1.set_title('PyTorch')
+ax2.plot(fps_trt)
+ax1.set_xlabel('Iteration')
+ax1.set_ylabel('FPS')
+ax2.set_title('PyTorch -> TensorRT')
 ```
         
         
