@@ -186,7 +186,7 @@ Transform the image using the transformations we created earlier
 image = data_transform(image).unsqueeze(0).cuda()
 ```
 
-# Convert mode for use with TensorRT
+# Convert model for use with TensorRT
 
 ```python
 # create example data 
